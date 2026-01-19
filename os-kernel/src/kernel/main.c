@@ -1,4 +1,5 @@
 #include "../../include/uart.h"
+#include "../../include/timer.h"
 
 #define MSTATUS 0x300
 #define MTVEC 0x305
@@ -14,24 +15,29 @@
     asm volatile("csrs " #csr ", %0" :: "r"(val))
 
 
+
 extern void trap_vector(void);
 
 
 void kernel_main() {
     uart_puts("Kernel starting...\n");
 
-    //uart_puthex((unsigned int)trap_vector);
-
     // install trap vector
     csr_write(mtvec, (unsigned int)trap_vector);
 
+    reset_timer();
+
     // enable timer interrupts
-    //csr_set(mie, MIE_MTIE);
+    csr_set(mie, MIE_MTIE);
 
     // enable global interrupts
-    //csr_set(mstatus, MSTATUS_MIE);
+    csr_set(mstatus, MSTATUS_MIE);
 
-    //uart_puts("Traps and machine timer interrupts enabled...\n");
+    uart_puts("Traps and machine timer interrupts enabled...\n");
+
+    while (1) {
+	asm volatile("wfi");
+    }
 
     asm volatile(".word 0xffffffff");
 
