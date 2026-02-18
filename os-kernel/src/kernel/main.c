@@ -1,5 +1,7 @@
 #include "../../include/uart.h"
 #include "../../include/timer.h"
+#include "../../include/schedule.h"
+#include "../../include/task.h"
 
 #define MSTATUS 0x300
 #define MTVEC 0x305
@@ -19,8 +21,26 @@
 extern void trap_vector(void);
 
 
+void task1() {
+    while (1) {
+        uart_puts("Task 1 running\n");
+        for (volatile int i = 0; i < 1000000; i++);
+    }
+}
+
+void task2() {
+    while (1) {
+        uart_puts("Task 2 running\n");
+        for (volatile int i = 0; i < 1000000; i++);
+    }
+}
+
+
 void kernel_main() {
     uart_puts("Kernel starting...\n");
+
+    task_create(task1);
+    task_create(task2);
 
     // install trap vector
     csr_write(mtvec, (unsigned int)trap_vector);

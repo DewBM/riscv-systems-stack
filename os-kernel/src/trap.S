@@ -26,7 +26,11 @@ trap_vector:
     sw s3,  0(sp)
 
     csrr a0, mcause # save the cause of the trap in the a0 register
+    addi a1, sp, 0
+
     call trap_handler
+
+    addi sp, a0, 0
 
     # restore saved registers
     lw ra,  60(sp)

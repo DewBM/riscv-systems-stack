@@ -1,12 +1,13 @@
 #include "../../include/uart.h"
 #include "../../include/timer.h"
+#include "../../include/schedule.h"
 
 #define CAUSE_INTERRUPT (1U << 31)
 #define CAUSE_CODE_MASK 0x7FFFFFFF
 
 #define IRQ_M_TIMER 7
 
-void trap_handler(unsigned int cause) {
+uint32_t *trap_handler(unsigned int cause, uint32_t *sp) {
     // uart_puts("Starting trap  handler...\n");
 
     if (cause & CAUSE_INTERRUPT) {
@@ -17,6 +18,7 @@ void trap_handler(unsigned int cause) {
 	    // handle timer interrupts
 	    uart_puts("Timer interrupt occured...\n");
 	    reset_timer();
+	    return schedule(sp);
 	}
     }
     else {
@@ -26,4 +28,6 @@ void trap_handler(unsigned int cause) {
 	
 	while(1);
     }
+
+    return sp;
 }
