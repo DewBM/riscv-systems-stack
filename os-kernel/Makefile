@@ -2,7 +2,7 @@ CC = riscv32-unknown-elf-gcc
 CFLAGS = -march=rv32im_zicsr -mabi=ilp32 -nostdlib -ffreestanding -O0
 LDFLAGS = -T linker.ld
 
-SRCS = startup.S src/trap.S src/kernel/timer.c src/kernel/uart.c src/kernel/trap.c src/kernel/main.c 
+SRCS = startup.S src/trap.S src/kernel/task.c src/kernel/schedule.c src/kernel/timer.c src/kernel/uart.c src/kernel/trap.c src/kernel/main.c 
 OBJS = $(SRCS:.c=.o)
 
 all: kernel.elf
