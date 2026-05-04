@@ -1,0 +1,6 @@
+[submodule "cpu-sim"]
+	path = cpu-sim
+	url = https://github.com/DewBM/riscv-cpu-sim.git
+[submodule "kernel"]
+	path = kernel
+	url = https://github.com/DewBM/riscv-kernel.git
